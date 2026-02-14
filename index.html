@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAROBAR · PREVIEW</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dozon-green: #00FF00;
+            --xyz-violet: #8F00FF;
+            --primary: #8F00FF;
+            --secondary: #404040;
+            --accent: #00FF00;
+            --white: #FFFFFF;
+            --black: #000000;
+            --darkgrey: #1A1A1A;
+            --mediumgrey: #333333;
+            --lightgrey: #C0C0C0;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glow-color: rgba(255, 255, 255, 0.3);
+            --rose-gold: #8A2BE2;
+            --rose-gold-light: #B873FF;
+            --dark-green: #011A10;
+            --darker-green: #001009;
+            --grid-color: rgba(138, 43, 226, 0.1);
+            --bg-color: #000000;
+            --strike-red: #ff5f5f;
+            --win-gold: #ffd966;
+            --warning-orange: #ff9900;
+            --success-green: #00cc66;
+            --select-blue: #3399ff;
+            --primary-green: #00FF00;
+            
+            --font-main: 'IBM Plex Mono', monospace;
+            --font-futuristic: 'Orbitron', sans-serif;
+            --neon-glow: 0 0 20px currentColor;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: #000;
+            font-family: 'IBM Plex Mono', monospace;
+            color: #f0f0f0;
+            padding: 15px;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 255, 0, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(143, 0, 255, 0.1) 0%, transparent 40%);
+        }
+
+        .app {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Main Device Frame */
+        .ecosystem-device {
+            width: 100%;
+            background: linear-gradient(145deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 30, 0.95));
+            border-radius: 30px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.4), 0 0 80px rgba(143, 0, 255, 0.2), inset 0 0 20px rgba(255,255,255,0.05);
+            border: 2px solid var(--xyz-violet);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .ecosystem-device.live-mode {
+            border-color: var(--dozon-green);
+            box-shadow: 0 0 60px rgba(0, 255, 0, 0.6), 0 0 100px rgba(143, 0, 255, 0.3);
+        }
+
+        /* Cyber Grid Background */
+        .cyber-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(138, 43, 226, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(138, 43, 226, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Pod Header */
+        .pod-header {
+            background: linear-gradient(180deg, rgba(1, 26, 16, 0.95) 0%, rgba(0, 16, 9, 0.95) 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 10;
+        }
+
+        .pod-model-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .pod-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(1, 26, 16, 0.9);
+            border: 1px solid var(--dozon-green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 1px;
+            background: var(--dozon-green);
+            animation: dotPulse 1.5s infinite alternate;
+            box-shadow: 0 0 8px var(--dozon-green);
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+            background: var(--xyz-violet);
+            box-shadow: 0 0 8px var(--xyz-violet);
+        }
+
+        @keyframes dotPulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .pod-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .carobar-text {
+            color: var(--dozon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+        }
+
+        .live-text {
+            color: var(--xyz-violet);
+            text-shadow: 0 0 10px rgba(143, 0, 255, 0.7);
+            animation: blink-live 1s steps(2) infinite;
+        }
+
+        @keyframes blink-live {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        .live-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-box {
+            text-align: right;
+        }
+
+        .stat-label {
+            font-size: 9px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dozon-green);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Time Mode */
+        .time-mode {
+            background: rgba(1, 26, 16, 0.95);
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        .mode-badge {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .mode-badge.night {
+            background: rgba(143, 0, 255, 0.2);
+            border: 1px solid var(--xyz-violet);
+            color: var(--xyz-violet);
+        }
+
+        .mode-badge.day {
+            background: rgba(255, 153, 0, 0.2);
+            border: 1px solid #FF9900;
+            color: #FF9900;
+        }
+
+        .time-display {
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            color: var(--dozon-green);
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        /* PREVIEW MODE */
+        .preview-box {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--xyz-violet);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .blink-live {
+            font-size: 42px;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 16px;
+            background: var(--glass);
+            border: 2px dashed var(--dozon-green);
+            box-shadow: 0 0 36px 3px rgba(0, 255, 0, 0.2) inset;
+            transition: transform .18s;
+            color: var(--xyz-violet);
+            font-family: var(--font-futuristic);
+            margin: 30px 0;
+            animation: glow-pulse 2s infinite;
+        }
+
+        .blink-live .bar {
+            display: inline-block;
+            animation: blink 1s steps(1) infinite;
+            color: var(--dozon-green);
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.08; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { box-shadow: 0 0 36px 3px rgba(0, 255, 0, 0.2) inset; }
+            50% { box-shadow: 0 0 56px 10px rgba(143, 0, 255, 0.3) inset; }
+        }
+
+        .entry-fee {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--dozon-green);
+            margin: 20px 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--rose-gold);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dozon-green);
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        .header {
+            background: #0f1410;
+            border: 1px solid #1f3a2a;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .budget-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1a2a1a;
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-green);
+        }
+
+        .budget-input {
+            background: #0f1a0f;
+            border: 1px solid #3a5a4a;
+            padding: 8px 12px;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+            width: 140px;
+        }
+
+        .budget-input:focus {
+            outline: none;
+            border-color: var(--dozon-green);
+        }
+
+        .wallet-box {
+            background: #1a2a1a;
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--primary-green);
+        }
+
+        .wallet-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-green);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .strike-box {
+            background: #3a1a1a;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: var(--strike-red);
+            border: 1px solid var(--strike-red);
+            font-weight: 600;
+        }
+
+        .available-count {
+            background: #1a3a2a;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: var(--dozon-green);
+            border: 1px solid var(--dozon-green);
+            font-weight: 600;
+        }
+
+        /* Rules Panel */
+        .rules-panel {
+            background: #0a1a0e;
+            border: 2px solid var(--rose-gold);
+            border-radius: 16px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .rules-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .rule-card {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid var(--rose-gold);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .rule-card h4 {
+            color: var(--rose-gold);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .rule-card li {
+            font-size: 10px;
+            color: #ccc;
+            margin-left: 15px;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        /* Cars Grid */
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .car-card {
+            background: #0f1410;
+            border: 1px solid #2a4a3a;
+            border-radius: 16px;
+            padding: 12px;
+            transition: 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .car-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--rose-gold);
+        }
+
+        .car-card.selected {
+            border: 3px solid var(--select-blue);
+            box-shadow: 0 0 20px rgba(51, 153, 255, 0.3);
+        }
+
+        .car-card.within-budget {
+            border-left: 8px solid var(--success-green);
+        }
+
+        .car-card.above-budget {
+            border-left: 8px solid var(--warning-orange);
+        }
+
+        .car-type {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 9px;
+            padding: 3px 6px;
+            border-radius: 12px;
+        }
+
+        .type-NEW {
+            background: #1e4a2a;
+            color: #00ff9d;
+        }
+
+        .type-USED {
+            background: #4a3a1a;
+            color: #ffd966;
+        }
+
+        .budget-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .badge-within {
+            background: #1e4a2a;
+            color: #00ff9d;
+        }
+
+        .badge-above {
+            background: #4a2a1a;
+            color: #ff9900;
+        }
+
+        .bid-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1e3a2a;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-size: 12px;
+        }
+
+        .bid-btn:hover:not(:disabled) {
+            background: #2a5a3a;
+        }
+
+        .bid-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .winner-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--win-gold);
+            color: black;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* Panels */
+        .panel {
+            background: #0f1410;
+            border: 1px solid #2a4a3a;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .panel-title {
+            color: var(--rose-gold);
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #2a4a3a;
+        }
+
+        /* Wins List */
+        .wins-container {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .win-item {
+            background: #1a3a1a;
+            border: 1px solid #3a5a4a;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        .win-item.selected {
+            border: 3px solid var(--win-gold);
+            background: #1e4a2a;
+        }
+
+        .win-checkbox {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: var(--win-gold);
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #006633, #00b359);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .buy-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,230,100,0.3);
+        }
+
+        .buy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .countdown-timer {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            color: var(--win-gold);
+            text-align: center;
+            padding: 10px;
+            background: #000;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 2px solid var(--win-gold);
+        }
+
+        /* SPOC Card */
+        .spoc-card {
+            background: linear-gradient(135deg, #0a1a1a, #1a2a1a);
+            border: 2px solid var(--rose-gold);
+            border-radius: 16px;
+            padding: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .spoc-contact {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #0a1a1a;
+            border-radius: 12px;
+            border: 1px solid var(--rose-gold);
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--rose-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+        }
+
+        .contact-phone {
+            color: var(--dozon-green);
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .delivery-address {
+            margin-top: 15px;
+            padding: 12px;
+            background: #1a3a2a;
+            border-radius: 10px;
+            border-left: 4px solid var(--dozon-green);
+            font-size: 12px;
+        }
+
+        .demo-btn {
+            padding: 6px 12px;
+            background: #2a3a2a;
+            border: 1px solid #4a6a5a;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .demo-btn.success {
+            background: #1e4a2a;
+            border-color: var(--primary-green);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .info-text {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 35px;
+            background: rgba(1, 26, 16, 0.95);
+            border-top: 1px solid rgba(0, 255, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            font-size: 11px;
+            color: #FFFFFF;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--dozon-green);
+            box-shadow: 0 0 10px var(--dozon-green);
+            animation: blink 2s infinite;
+            border-radius: 2px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0f1410;
+            border: 2px solid var(--rose-gold);
+            border-radius: 24px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pod-title {
+                font-size: 20px;
+            }
+            
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Main Device -->
+        <div class="ecosystem-device" id="mainDevice">
+            <div class="cyber-grid"></div>
+            
+            <!-- Pod Header -->
+            <div class="pod-header">
+                <div class="pod-model-display">
+                    <div class="pod-icon">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="pod-status">
+                        <div class="pod-title" id="brandTitle">
+                            <span class="carobar-text">CAROBAR</span><span class="live-text" id="liveSuffix"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="live-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">CARS</div>
+                        <div class="stat-value" id="liveCars">108</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">BIDS</div>
+                        <div class="stat-value" id="liveBids">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">WINS</div>
+                        <div class="stat-value" id="liveWins">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Mode Indicator -->
+            <div class="time-mode" id="timeModeIndicator">
+                <div class="mode-badge night" id="nightModeBadge">🌙 NIGHT BIDDING (10:01 PM - 10:01 AM)</div>
+                <div class="mode-badge day hidden" id="dayModeBadge">☀️ DAY DELIVERY (10:01 AM - 10:01 PM)</div>
+                <div class="time-display" id="currentTimeDisplay">--:--:--</div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- PREVIEW MODE (Initial) -->
+                <div id="previewMode">
+                    <div class="preview-box">
+                        <h1 style="font-family: 'Orbitron'; font-size: 36px; margin-bottom: 20px;">
+                            <span style="color: var(--dozon-green);">CAROBAR</span>
+                        </h1>
+                        
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <div class="metric-value">108</div>
+                                <div class="metric-label">CARS</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">₹6-60L</div>
+                                <div class="metric-label">PRICE RANGE</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-value">18</div>
+                                <div class="metric-label">BRANDS</div>
+                            </div>
+                        </div>
+                        
+                        <p style="color: #ccc; font-size: 14px; margin: 20px 0;">
+                            Pay ₹101 to unlock <span style="color: var(--xyz-violet);">CAROBAR.LIVE</span> full access
+                        </p>
+                        
+                        <div class="blink-live" id="enterLiveBtn">
+                            ENTER <span class="bar">.LIVE</span>
+                        </div>
+                        
+                        <div class="entry-fee">₹101</div>
+                        
+                        <div style="color: #888; font-size: 11px;">
+                            <i class="fas fa-clock"></i> Bidding: 10:01 PM - 10:01 AM<br>
+                            <i class="fas fa-truck"></i> Delivery: 10:01 AM - 10:01 PM
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE MODE (After payment) -->
+                <div id="liveMode" class="hidden">
+                    <!-- Header with Budget -->
+                    <div class="header">
+                        <div class="header-top">
+                            <div class="budget-section">
+                                <span style="color:#aaa;">MY BUDGET:</span>
+                                <input type="number" id="budgetInput" class="budget-input" value="1500000" step="100000" min="100000" placeholder="₹">
+                                <span style="color:var(--primary-green);" id="budgetDisplay">₹15,00,000</span>
+                            </div>
+                            <div class="available-count" id="availableCount">
+                                <i class="fas fa-car"></i> <span id="carsWithinBudget">108</span> available
+                            </div>
+                            <div class="wallet-box">
+                                <span style="color:#aaa; font-size:11px;">WALLET</span>
+                                <div class="wallet-amount" id="walletDisplay">₹25,000</div>
+                            </div>
+                            <div class="strike-box" id="strikeDisplay">
+                                <i class="fas fa-exclamation-triangle"></i> <span id="strikeCount">0</span>/3
+                            </div>
+                        </div>
+
+                        <!-- Rules Panel -->
+                        <div class="rules-panel">
+                            <h3 style="color:var(--rose-gold); font-size:14px; margin-bottom:5px;">📋 RULES</h3>
+                            <div class="rules-content">
+                                <div class="rule-card">
+                                    <h4>💰 BIDDING</h4>
+                                    <ul>
+                                        <li>₹1001 per bid</li>
+                                        <li>Unique timestamp</li>
+                                    </ul>
+                                </div>
+                                <div class="rule-card">
+                                    <h4>🏆 WINNER</h4>
+                                    <ul>
+                                        <li>Highest bid wins</li>
+                                        <li>Tie = earliest timestamp</li>
+                                    </ul>
+                                </div>
+                                <div class="rule-card">
+                                    <h4>💸 PAYMENT</h4>
+                                    <ul>
+                                        <li>Win + Buy = pay ₹1,00,001</li>
+                                        <li>15 min to pay</li>
+                                    </ul>
+                                </div>
+                                <div class="rule-card">
+                                    <h4>📞 DELIVERY</h4>
+                                    <ul>
+                                        <li>SPOC assigned</li>
+                                        <li>Visit after 10:01 AM</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="main-grid">
+                        <!-- Cars Grid -->
+                        <div class="panel">
+                            <div class="panel-title">
+                                <i class="fas fa-car"></i> AVAILABLE CARS
+                                <span style="float:right; font-size:12px;" id="carsCount">108</span>
+                            </div>
+                            <div class="cars-grid" id="carsGrid">
+                                <!-- Cars loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Side Panels -->
+                        <div>
+                            <!-- Active Bids -->
+                            <div class="panel">
+                                <div class="panel-title">
+                                    <i class="fas fa-list"></i> YOUR ACTIVE BIDS
+                                </div>
+                                <div id="bidsList" style="max-height:150px; overflow-y:auto;">
+                                    <div style="text-align:center; color:#666; padding:15px;">No bids yet</div>
+                                </div>
+                            </div>
+
+                            <!-- Your Wins Section -->
+                            <div class="panel" id="winsPanel">
+                                <div class="panel-title">
+                                    <i class="fas fa-trophy"></i> YOUR WINS
+                                </div>
+                                <div class="wins-container" id="winsList"></div>
+
+                                <button class="buy-btn" id="buyButton" onclick="payAdvance()" disabled>
+                                    PAY ₹1,00,001 & BUY
+                                </button>
+
+                                <div id="countdownSection" class="hidden">
+                                    <div class="countdown-timer" id="paymentTimer">15:00</div>
+                                    <p class="info-text">Time left to pay advance</p>
+                                </div>
+                            </div>
+
+                            <!-- SPOC Section -->
+                            <div class="panel hidden" id="spocPanel">
+                                <div class="panel-title">
+                                    <i class="fas fa-user-tie"></i> YOUR SPOC
+                                </div>
+                                <div id="spocDetails"></div>
+                            </div>
+
+                            <!-- Demo Controls (for testing) -->
+                            <div class="panel">
+                                <div class="panel-title">
+                                    <i class="fas fa-flask"></i> DEMO
+                                </div>
+                                <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                    <button class="demo-btn success" onclick="simulateWinner()">🏆 SIM WIN</button>
+                                    <button class="demo-btn" onclick="addStrike()">⚠️ STRIKE</button>
+                                    <button class="demo-btn" onclick="resetStrikes()">✅ RESET</button>
+                                    <button class="demo-btn success" onclick="addFunds()">➕ ₹10K</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="system-status">
+                    <span class="status-dot"></span>
+                    <span>CAROBAR: <span id="systemStatus">PREVIEW</span></span>
+                </div>
+                <div id="liveTime">00:00:00</div>
+                <div>BIDS: <span id="totalBidsCount">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div id="withdrawalModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--rose-gold); margin-bottom:15px;">WITHDRAW</h3>
+            <div style="margin-bottom:15px;">
+                <label style="color:#aaa; font-size:12px;">Amount (₹)</label>
+                <input type="number" id="withdrawAmount" class="budget-input" style="width:100%; margin-top:5px;" value="10000">
+            </div>
+            <div class="tax-breakup" id="taxBreakup"></div>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="demo-btn success" style="flex:1;" onclick="processWithdrawal()">CONFIRM</button>
+                <button class="demo-btn" style="flex:1;" onclick="closeWithdrawalModal()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CAROBAR.LIVE - REALISTIC CAR BIDDING
+        // ============================================
+
+        // State Management
+        const STATE = {
+            isLive: false,
+            user: {
+                budget: 1500000,
+                wallet: 25000,
+                strikes: 0,
+                isBlocked: false,
+                bids: [],
+                wins: [],
+                selectedWinForBuy: null,
+                spoc: null,
+                paymentDeadline: null,
+                entryPaid: false
+            },
+            cars: [],
+            selectedCarForWinner: null,
+            totalBids: 0,
+            lastInventoryDate: null
+        };
+
+        // REALISTIC Indian Cars 2024 with actual prices
+        const CAR_INVENTORY = [
+            // Budget Cars (6-12 Lakhs)
+            { brand: 'Maruti', model: 'Swift', type: 'Hatchback', basePrice: 699000, year: 2024 },
+            { brand: 'Maruti', model: 'Baleno', type: 'Hatchback', basePrice: 849000, year: 2024 },
+            { brand: 'Maruti', model: 'Dzire', type: 'Sedan', basePrice: 899000, year: 2024 },
+            { brand: 'Hyundai', model: 'i20', type: 'Hatchback', basePrice: 949000, year: 2024 },
+            { brand: 'Hyundai', model: 'Grand i10', type: 'Hatchback', basePrice: 699000, year: 2024 },
+            { brand: 'Hyundai', model: 'Aura', type: 'Sedan', basePrice: 799000, year: 2024 },
+            { brand: 'Tata', model: 'Tiago', type: 'Hatchback', basePrice: 649000, year: 2024 },
+            { brand: 'Tata', model: 'Altroz', type: 'Hatchback', basePrice: 849000, year: 2024 },
+            { brand: 'Tata', model: 'Punch', type: 'Micro SUV', basePrice: 799000, year: 2024 },
+            { brand: 'Renault', model: 'Kwid', type: 'Hatchback', basePrice: 599000, year: 2024 },
+            { brand: 'Renault', model: 'Kiger', type: 'SUV', basePrice: 899000, year: 2024 },
+            { brand: 'Nissan', model: 'Magnite', type: 'SUV', basePrice: 849000, year: 2024 },
+            
+            // Mid-Range SUVs (12-25 Lakhs)
+            { brand: 'Hyundai', model: 'Creta', type: 'SUV', basePrice: 1499000, year: 2024 },
+            { brand: 'Hyundai', model: 'Venue', type: 'SUV', basePrice: 1199000, year: 2024 },
+            { brand: 'Kia', model: 'Seltos', type: 'SUV', basePrice: 1499000, year: 2024 },
+            { brand: 'Kia', model: 'Sonet', type: 'SUV', basePrice: 1199000, year: 2024 },
+            { brand: 'Kia', model: 'Carens', type: 'MPV', basePrice: 1499000, year: 2024 },
+            { brand: 'Tata', model: 'Nexon', type: 'SUV', basePrice: 1199000, year: 2024 },
+            { brand: 'Tata', model: 'Harrier', type: 'SUV', basePrice: 1999000, year: 2024 },
+            { brand: 'Tata', model: 'Safari', type: 'SUV', basePrice: 2199000, year: 2024 },
+            { brand: 'Mahindra', model: 'XUV700', type: 'SUV', basePrice: 1999000, year: 2024 },
+            { brand: 'Mahindra', model: 'Scorpio N', type: 'SUV', basePrice: 1699000, year: 2024 },
+            { brand: 'Mahindra', model: 'Thar', type: 'Off-Road', basePrice: 1599000, year: 2024 },
+            { brand: 'MG', model: 'Hector', type: 'SUV', basePrice: 1999000, year: 2024 },
+            { brand: 'MG', model: 'Astor', type: 'SUV', basePrice: 1499000, year: 2024 },
+            { brand: 'Skoda', model: 'Kushaq', type: 'SUV', basePrice: 1499000, year: 2024 },
+            { brand: 'Skoda', model: 'Slavia', type: 'Sedan', basePrice: 1499000, year: 2024 },
+            { brand: 'Volkswagen', model: 'Taigun', type: 'SUV', basePrice: 1499000, year: 2024 },
+            { brand: 'Volkswagen', model: 'Virtus', type: 'Sedan', basePrice: 1499000, year: 2024 },
+            { brand: 'Honda', model: 'City', type: 'Sedan', basePrice: 1499000, year: 2024 },
+            { brand: 'Honda', model: 'Amaze', type: 'Sedan', basePrice: 899000, year: 2024 },
+            { brand: 'Toyota', model: 'Urban Cruiser', type: 'SUV', basePrice: 1199000, year: 2024 },
+            { brand: 'Toyota', model: 'Glanza', type: 'Hatchback', basePrice: 899000, year: 2024 },
+            
+            // Premium (25-45 Lakhs)
+            { brand: 'Toyota', model: 'Innova Crysta', type: 'MPV', basePrice: 2499000, year: 2024 },
+            { brand: 'Toyota', model: 'Fortuner', type: 'SUV', basePrice: 3899000, year: 2024 },
+            { brand: 'Ford', model: 'Endeavour', type: 'SUV', basePrice: 3599000, year: 2023 },
+            { brand: 'Mahindra', model: 'Alturas G4', type: 'SUV', basePrice: 2999000, year: 2023 },
+            { brand: 'MG', model: 'Gloster', type: 'SUV', basePrice: 3499000, year: 2024 },
+            { brand: 'Skoda', model: 'Superb', type: 'Sedan', basePrice: 3999000, year: 2024 },
+            { brand: 'Volkswagen', model: 'Tiguan', type: 'SUV', basePrice: 3599000, year: 2024 },
+            
+            // Luxury (45-60 Lakhs)
+            { brand: 'BMW', model: 'X1', type: 'Luxury SUV', basePrice: 4599000, year: 2024 },
+            { brand: 'BMW', model: '2 Series', type: 'Luxury Sedan', basePrice: 4599000, year: 2024 },
+            { brand: 'Mercedes', model: 'A-Class', type: 'Luxury Sedan', basePrice: 4799000, year: 2024 },
+            { brand: 'Mercedes', model: 'GLA', type: 'Luxury SUV', basePrice: 5299000, year: 2024 },
+            { brand: 'Audi', model: 'Q3', type: 'Luxury SUV', basePrice: 4799000, year: 2024 },
+            { brand: 'Audi', model: 'A4', type: 'Luxury Sedan', basePrice: 4999000, year: 2024 },
+            { brand: 'Volvo', model: 'XC40', type: 'Luxury SUV', basePrice: 4899000, year: 2024 },
+            { brand: 'Volvo', model: 'S60', type: 'Luxury Sedan', basePrice: 4999000, year: 2024 },
+            { brand: 'Jaguar', model: 'F-PACE', type: 'Luxury SUV', basePrice: 5499000, year: 2024 },
+            { brand: 'Jaguar', model: 'XE', type: 'Luxury Sedan', basePrice: 4999000, year: 2024 }
+        ];
+
+        // Dealership locations for delivery
+        const DEALERSHIPS = [
+            { city: 'Mumbai', address: 'Andheri East, Mumbai - 400093', phone: '+91 22 4123 4567' },
+            { city: 'Delhi', address: 'Connaught Place, New Delhi - 110001', phone: '+91 11 4234 5678' },
+            { city: 'Bangalore', address: 'MG Road, Bangalore - 560001', phone: '+91 80 4345 6789' },
+            { city: 'Chennai', address: 'Mount Road, Chennai - 600002', phone: '+91 44 4456 7890' },
+            { city: 'Hyderabad', address: 'Jubilee Hills, Hyderabad - 500033', phone: '+91 40 4567 8901' },
+            { city: 'Pune', address: 'FC Road, Pune - 411004', phone: '+91 20 4678 9012' },
+            { city: 'Kolkata', address: 'Park Street, Kolkata - 700016', phone: '+91 33 4789 0123' }
+        ];
+
+        // SPOC names
+        const SPOC_DATA = [
+            { name: 'Rajesh Kumar', designation: 'Senior Sales Manager', phone: '+91 98765 43210', email: 'rajesh.kumar@tatamotors.com' },
+            { name: 'Priya Singh', designation: 'Customer Relations Head', phone: '+91 99887 66554', email: 'priya.singh@hyundai.com' },
+            { name: 'Vikram Mehta', designation: 'Dealership SPOC', phone: '+91 91234 56789', email: 'vikram.mehta@mahindra.com' },
+            { name: 'Neha Gupta', designation: 'Account Manager', phone: '+91 97654 32109', email: 'neha.gupta@honda.com' },
+            { name: 'Arun Sharma', designation: 'Sales Consultant', phone: '+91 95678 90123', email: 'arun.sharma@toyota.com' },
+            { name: 'Sunita Patel', designation: 'Customer Success Manager', phone: '+91 93456 78901', email: 'sunita.patel@mgmotor.com' },
+            { name: 'Amit Verma', designation: 'Senior Executive', phone: '+91 94567 89012', email: 'amit.verma@kia.com' }
+        ];
+
+        // Generate 108 cars from realistic inventory (duplicate with variations)
+        function generateCars() {
+            const cars = [];
+            
+            // Create 108 cars by repeating inventory with price variations
+            for (let i = 1; i <= 108; i++) {
+                const baseCar = CAR_INVENTORY[Math.floor(Math.random() * CAR_INVENTORY.length)];
+                
+                // Add slight price variation (±5%)
+                const variation = (Math.random() * 0.1) - 0.05; // -5% to +5%
+                let price = Math.round(baseCar.basePrice * (1 + variation) / 1000) * 1000;
+                
+                // Ensure price is at least 5 Lakhs
+                price = Math.max(500000, price);
+                
+                // Determine if NEW or USED (80% NEW, 20% USED)
+                const isNew = Math.random() > 0.2;
+                const year = isNew ? 2024 : 2021 + Math.floor(Math.random() * 3);
+                
+                cars.push({
+                    id: `CAR-${String(i).padStart(3,'0')}`,
+                    displayName: `${baseCar.brand} ${baseCar.model}`,
+                    type: isNew ? 'NEW' : 'USED',
+                    price: price,
+                    year: year,
+                    category: baseCar.type,
+                    bids: [],
+                    isWinner: false
+                });
+            }
+            
+            // Sort by price
+            return cars.sort((a, b) => a.price - b.price);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            STATE.cars = generateCars();
+            initCanvas();
+            updateTime();
+            checkTimeMode();
+            setInterval(checkTimeMode, 1000);
+            checkDailyInventory(); // Check for 10:01 AM refresh
+            setInterval(checkDailyInventory, 60000); // Check every minute
+            
+            document.getElementById('liveSuffix').textContent = '';
+            document.getElementById('systemStatus').textContent = 'PREVIEW';
+            
+            document.getElementById('enterLiveBtn').addEventListener('click', payEntryFee);
+            
+            // Budget input listener - FILTERS CARS IN REAL TIME
+            document.getElementById('budgetInput').addEventListener('input', (e) => {
+                STATE.user.budget = parseInt(e.target.value) || 1500000;
+                document.getElementById('budgetDisplay').textContent = '₹' + STATE.user.budget.toLocaleString();
+                updateCarsGrid(); // This will filter cars based on budget
+            });
+        });
+
+        // Check for daily inventory refresh at 10:01 AM
+        function checkDailyInventory() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            // Check if it's 10:01 AM
+            if (hours === 10 && minutes === 1) {
+                const today = now.toDateString();
+                
+                // Only refresh once per day
+                if (STATE.lastInventoryDate !== today) {
+                    STATE.lastInventoryDate = today;
+                    
+                    // Generate new inventory
+                    STATE.cars = generateCars();
+                    
+                    // Reset user bids/wins (keep wallet, strikes)
+                    STATE.user.bids = [];
+                    STATE.user.wins = [];
+                    STATE.user.selectedWinForBuy = null;
+                    STATE.totalBids = 0;
+                    
+                    if (STATE.isLive) {
+                        updateCarsGrid();
+                        updateBidsList();
+                        updateWinsList();
+                        alert('🚀 NEW STOCK ARRIVED! 108 fresh cars available for bidding tonight.');
+                    }
+                }
+            }
+        }
+
+        // Pay ₹101 Entry Fee
+        function payEntryFee() {
+            if (STATE.user.wallet < 101) {
+                alert('Insufficient balance for entry fee');
+                return;
+            }
+            
+            STATE.user.wallet -= 101;
+            STATE.isLive = true;
+            STATE.user.entryPaid = true;
+            
+            document.getElementById('mainDevice').classList.add('live-mode');
+            document.getElementById('liveSuffix').textContent = '.LIVE';
+            document.getElementById('previewMode').style.display = 'none';
+            document.getElementById('liveMode').classList.remove('hidden');
+            document.getElementById('systemStatus').textContent = 'LIVE';
+            document.title = 'CAROBAR.LIVE · LIVE BIDDING';
+            
+            updateCarsGrid();
+            updateBidsList();
+            updateWinsList();
+            updateUI();
+            
+            alert('✅ Welcome to CAROBAR.LIVE! ₹101 paid. Start bidding!');
+        }
+
+        // Check Time Mode (10:01 PM - 10:01 AM = NIGHT/Bidding)
+        function checkTimeMode() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            
+            const currentMinutes = hours * 60 + minutes;
+            const nightStart = 22 * 60 + 1; // 10:01 PM
+            const nightEnd = 10 * 60 + 1;    // 10:01 AM
+            
+            let isNightMode = (currentMinutes >= nightStart || currentMinutes < nightEnd);
+            
+            if (isNightMode) {
+                document.getElementById('nightModeBadge').classList.remove('hidden');
+                document.getElementById('dayModeBadge').classList.add('hidden');
+            } else {
+                document.getElementById('nightModeBadge').classList.add('hidden');
+                document.getElementById('dayModeBadge').classList.remove('hidden');
+            }
+            
+            document.getElementById('currentTimeDisplay').textContent = 
+                `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        }
+
+        // Update Cars Grid with BUDGET FILTERING
+        function updateCarsGrid() {
+            const grid = document.getElementById('carsGrid');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            // Filter cars based on budget
+            const carsWithinBudget = STATE.cars.filter(car => car.price <= STATE.user.budget);
+            const carsAboveBudget = STATE.cars.filter(car => car.price > STATE.user.budget);
+            
+            // Show count of available cars
+            document.getElementById('carsWithinBudget').textContent = carsWithinBudget.length;
+            document.getElementById('carsCount').textContent = STATE.cars.length;
+            
+            // First show cars within budget
+            carsWithinBudget.forEach(car => {
+                const card = createCarCard(car, true);
+                grid.appendChild(card);
+            });
+            
+            // Then show cars above budget (optional - can hide completely if desired)
+            // Comment this out to hide above-budget cars completely
+            carsAboveBudget.forEach(car => {
+                const card = createCarCard(car, false);
+                grid.appendChild(card);
+            });
+        }
+
+        function createCarCard(car, withinBudget) {
+            const userBid = STATE.user.bids.find(b => b.carId === car.id);
+            const isWinner = STATE.user.wins.some(w => w.carId === car.id);
+            const isSelected = STATE.selectedCarForWinner === car.id;
+            
+            const card = document.createElement('div');
+            card.className = `car-card ${withinBudget ? 'within-budget' : 'above-budget'} ${isSelected ? 'selected' : ''}`;
+            card.onclick = () => selectCarForWinner(car.id);
+            
+            // Format price in Lakhs for display
+            const priceInLakhs = (car.price / 100000).toFixed(2);
+            
+            card.innerHTML = `
+                <span class="car-type type-${car.type}">${car.type}</span>
+                ${isWinner ? '<span class="winner-badge">🏆 WINNER</span>' : ''}
+                <div style="font-weight:600; margin:10px 0 3px; font-size:14px;">${car.displayName}</div>
+                <div style="font-size:10px; color:#888;">${car.id} · ${car.year} · ${car.category || ''}</div>
+                <div style="font-size:16px; color:var(--primary-green); margin:8px 0;">
+                    ₹${car.price.toLocaleString()} <span style="font-size:10px; color:#888;">(${priceInLakhs} Lakh)</span>
+                </div>
+                <div>
+                    <span class="budget-badge ${withinBudget ? 'badge-within' : 'badge-above'}">
+                        ${withinBudget ? '✓ In Budget' : '⚠️ Above Budget'}
+                    </span>
+                </div>
+                ${userBid ? 
+                    `<div style="background:#2266aa30; padding:6px; border-radius:6px; margin-top:8px; font-size:11px;">
+                        <span style="color:#99ccff;">✓ Bid: ₹${userBid.amount.toLocaleString()}</span>
+                        <div style="font-size:9px;">${userBid.timestamp}</div>
+                     </div>` : 
+                    `<button class="bid-btn" onclick="event.stopPropagation(); placeBid('${car.id}')" 
+                        ${STATE.user.strikes >= 3 || !STATE.isLive ? 'disabled' : ''}>
+                        BID ₹1,001
+                    </button>`
+                }
+            `;
+            
+            return card;
+        }
+
+        // Place Bid
+        function placeBid(carId) {
+            if (!STATE.isLive) {
+                alert('Pay ₹101 entry fee first');
+                return;
+            }
+            
+            if (STATE.user.strikes >= 3) {
+                alert('❌ You are blocked due to 3 strikes');
+                return;
+            }
+            
+            if (STATE.user.wallet < 1001) {
+                alert('Insufficient balance');
+                return;
+            }
+            
+            const car = STATE.cars.find(c => c.id === carId);
+            if (!car) return;
+            
+            STATE.user.wallet -= 1001;
+            
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString() + '.' + String(now.getMilliseconds()).padStart(3,'0');
+            
+            // Realistic bidding: within 10% of car price
+            const variation = (Math.random() * 0.2) - 0.1; // -10% to +10%
+            const bidAmount = Math.round(car.price * (1 + variation) / 1000) * 1000;
+            
+            const bid = {
+                carId: car.id,
+                carName: car.displayName,
+                amount: bidAmount,
+                timestamp: timestamp,
+                timestampMs: now.getTime(),
+                bidFee: 1001
+            };
+            
+            STATE.user.bids.push(bid);
+            car.bids.push({
+                userId: 'current',
+                amount: bidAmount,
+                timestamp: timestamp,
+                timestampMs: now.getTime()
+            });
+            
+            STATE.totalBids++;
+            document.getElementById('totalBidsCount').textContent = STATE.totalBids;
+            document.getElementById('liveBids').textContent = STATE.user.bids.length;
+            
+            car.bids.sort((a, b) => b.amount - a.amount || a.timestampMs - b.timestampMs);
+            
+            updateCarsGrid();
+            updateBidsList();
+            updateUI();
+            
+            alert(`✅ Bid placed: ₹${bidAmount.toLocaleString()} on ${car.displayName}`);
+        }
+
+        function selectCarForWinner(carId) {
+            STATE.selectedCarForWinner = carId;
+            updateCarsGrid();
+        }
+
+        function simulateWinner() {
+            if (!STATE.selectedCarForWinner) {
+                alert('Click on a car first');
+                return;
+            }
+            
+            const car = STATE.cars.find(c => c.id === STATE.selectedCarForWinner);
+            if (!car) return;
+            
+            const userBid = STATE.user.bids.find(b => b.carId === car.id);
+            if (!userBid) {
+                alert('You need to bid on this car first');
+                return;
+            }
+            
+            if (STATE.user.wins.some(w => w.carId === car.id)) {
+                alert('Already won this car');
+                return;
+            }
+            
+            const win = {
+                carId: car.id,
+                carName: car.displayName,
+                winningBid: userBid.amount,
+                timestamp: userBid.timestamp,
+                selected: false
+            };
+            
+            STATE.user.wins.push(win);
+            car.isWinner = true;
+            
+            document.getElementById('liveWins').textContent = STATE.user.wins.length;
+            
+            alert(`🏆 YOU WON ${car.displayName}!`);
+            
+            updateWinsList();
+            updateCarsGrid();
+        }
+
+        function updateWinsList() {
+            const list = document.getElementById('winsList');
+            const buyButton = document.getElementById('buyButton');
+            
+            if (!list) return;
+            
+            if (STATE.user.wins.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#666; padding:15px;">No wins yet</div>';
+                buyButton.disabled = true;
+                return;
+            }
+            
+            list.innerHTML = STATE.user.wins.map((win, index) => `
+                <div class="win-item ${win.selected ? 'selected' : ''}" onclick="toggleWinSelection(${index})">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span style="color:#ffd966; font-weight:600; font-size:13px;">${win.carName}</span>
+                            <div style="font-size:10px; color:#888; margin-top:3px;">
+                                ₹${win.winningBid.toLocaleString()} · ${win.timestamp}
+                            </div>
+                        </div>
+                        <input type="radio" name="winSelect" class="win-checkbox" ${win.selected ? 'checked' : ''} onclick="event.stopPropagation(); toggleWinSelection(${index})">
+                    </div>
+                </div>
+            `).join('');
+            
+            const hasSelection = STATE.user.wins.some(w => w.selected);
+            buyButton.disabled = !hasSelection;
+        }
+
+        function toggleWinSelection(index) {
+            STATE.user.wins.forEach((win, i) => {
+                win.selected = (i === index) ? !win.selected : false;
+            });
+            
+            STATE.user.selectedWinForBuy = STATE.user.wins.find(w => w.selected) || null;
+            
+            updateWinsList();
+            
+            if (STATE.user.selectedWinForBuy) {
+                startPaymentTimer();
+                document.getElementById('countdownSection').classList.remove('hidden');
+            } else {
+                document.getElementById('countdownSection').classList.add('hidden');
+            }
+        }
+
+        function startPaymentTimer() {
+            let timeLeft = 900;
+            STATE.user.paymentDeadline = Date.now() + timeLeft * 1000;
+            
+            const timer = setInterval(() => {
+                const now = Date.now();
+                const diff = Math.max(0, Math.floor((STATE.user.paymentDeadline - now) / 1000));
+                
+                const mins = Math.floor(diff / 60);
+                const secs = diff % 60;
+                document.getElementById('paymentTimer').textContent = 
+                    `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+                
+                if (diff <= 0) {
+                    clearInterval(timer);
+                    if (STATE.user.selectedWinForBuy) {
+                        addStrike();
+                        document.getElementById('countdownSection').classList.add('hidden');
+                        alert('⚠️ Payment timeout! Strike added.');
+                        
+                        STATE.user.wins.forEach(w => w.selected = false);
+                        STATE.user.selectedWinForBuy = null;
+                        updateWinsList();
+                    }
+                }
+            }, 1000);
+        }
+
+        function payAdvance() {
+            if (!STATE.user.selectedWinForBuy) {
+                alert('Select a car first');
+                return;
+            }
+            
+            if (STATE.user.wallet < 100001) {
+                alert('Insufficient balance');
+                return;
+            }
+            
+            STATE.user.wallet -= 100001;
+            
+            const spoc = SPOC_DATA[Math.floor(Math.random() * SPOC_DATA.length)];
+            const dealership = DEALERSHIPS[Math.floor(Math.random() * DEALERSHIPS.length)];
+            
+            STATE.user.spoc = {
+                ...spoc,
+                reference: 'VIN-' + String(Math.floor(Math.random()*10000)).padStart(4,'0'),
+                carName: STATE.user.selectedWinForBuy.carName,
+                dealership: dealership
+            };
+            
+            document.getElementById('spocDetails').innerHTML = `
+                <div class="spoc-card">
+                    <div class="spoc-contact">
+                        <div class="contact-icon"><i class="fas fa-user"></i></div>
+                        <div>
+                            <div style="font-weight:600;">${STATE.user.spoc.name}</div>
+                            <div style="color:var(--rose-gold); font-size:11px;">${STATE.user.spoc.designation}</div>
+                            <div class="contact-phone">${STATE.user.spoc.phone}</div>
+                        </div>
+                    </div>
+                    <div style="padding:8px; background:#0a1a1a; border-radius:6px; margin:8px 0;">
+                        <div style="font-size:11px;">📧 ${STATE.user.spoc.email}</div>
+                        <div style="font-size:11px;">🔑 Ref: ${STATE.user.spoc.reference}</div>
+                    </div>
+                    <div class="delivery-address">
+                        <i class="fas fa-map-marker-alt" style="color:var(--dozon-green);"></i>
+                        <strong>Delivery after 10:01 AM</strong><br>
+                        ${STATE.user.spoc.dealership.address}<br>
+                        📞 ${STATE.user.spoc.dealership.phone}
+                    </div>
+                    <div style="margin-top:10px; padding:8px; background:#1a4a2a; border-radius:6px; text-align:center;">
+                        ✅ ADVANCE PAID: ₹1,00,001
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('spocPanel').classList.remove('hidden');
+            document.getElementById('countdownSection').classList.add('hidden');
+            
+            const car = STATE.cars.find(c => c.id === STATE.user.selectedWinForBuy.carId);
+            if (car) car.status = 'sold';
+            
+            STATE.user.wins = STATE.user.wins.filter(w => !w.selected);
+            STATE.user.selectedWinForBuy = null;
+            
+            updateUI();
+            updateCarsGrid();
+            updateWinsList();
+            
+            alert('✅ Advance paid! SPOC assigned. Visit dealership after 10:01 AM.');
+        }
+
+        function updateBidsList() {
+            const list = document.getElementById('bidsList');
+            if (!list) return;
+            
+            if (STATE.user.bids.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#666; padding:15px;">No bids yet</div>';
+                return;
+            }
+            
+            // Show last 5 bids, newest first
+            list.innerHTML = STATE.user.bids.slice(-5).reverse().map(bid => {
+                const isWinner = STATE.user.wins.some(w => w.carId === bid.carId);
+                return `
+                    <div style="border-bottom:1px solid #2a4a3a; padding:8px 0;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span style="font-size:12px;"><strong>${bid.carName}</strong> ${isWinner ? '🏆' : ''}</span>
+                            <span style="color:var(--primary-green); font-size:12px;">₹${bid.amount.toLocaleString()}</span>
+                        </div>
+                        <div style="font-size:9px; color:#888;">${bid.timestamp}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addStrike() {
+            if (STATE.user.strikes < 3) {
+                STATE.user.strikes++;
+                document.getElementById('strikeCount').textContent = STATE.user.strikes;
+                
+                if (STATE.user.strikes >= 3) {
+                    STATE.user.isBlocked = true;
+                    alert('🚫 BLOCKED - 3 STRIKES');
+                }
+            }
+            updateUI();
+        }
+
+        function resetStrikes() {
+            STATE.user.strikes = 0;
+            STATE.user.isBlocked = false;
+            document.getElementById('strikeCount').textContent = '0';
+            updateUI();
+        }
+
+        function addFunds() {
+            STATE.user.wallet += 10000;
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('walletDisplay').textContent = '₹' + STATE.user.wallet.toLocaleString();
+            document.getElementById('strikeCount').textContent = STATE.user.strikes;
+        }
+
+        // Withdrawal Functions
+        function showWithdrawalModal() {
+            document.getElementById('withdrawalModal').classList.add('active');
+            updateTaxCalculation();
+        }
+
+        function closeWithdrawalModal() {
+            document.getElementById('withdrawalModal').classList.remove('active');
+        }
+
+        function updateTaxCalculation() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+            const tds = amount * 0.018;
+            const gstOnTds = tds * 0.18;
+            const netAmount = amount - tds - gstOnTds;
+            
+            document.getElementById('taxBreakup').innerHTML = `
+                <p style="font-size:12px;">Amount: ₹${amount.toLocaleString()}</p>
+                <p style="color:#ff8888; font-size:11px;">TDS (1.8%): -₹${tds.toFixed(2)}</p>
+                <p style="color:#ff8888; font-size:11px;">GST on TDS (18%): -₹${gstOnTds.toFixed(2)}</p>
+                <p style="color:#00ff9d; font-size:16px; margin-top:8px;">Net: ₹${netAmount.toFixed(2)}</p>
+            `;
+        }
+
+        function processWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount > STATE.user.wallet) {
+                alert('Insufficient balance');
+                return;
+            }
+            
+            STATE.user.wallet -= amount;
+            updateUI();
+            closeWithdrawalModal();
+            alert(`✅ Withdrawal initiated: ₹${amount.toLocaleString()}`);
+        }
+
+        function updateTime() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('liveTime').textContent = 
+                    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+            }, 1000);
+        }
+
+        // Background canvas
+        const canvas = document.createElement('canvas');
+        canvas.id = 'canvas-bg';
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.zIndex = '-1';
+        canvas.style.opacity = '0.3';
+        document.body.appendChild(canvas);
+        
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 2,
+                    color: Math.random() > 0.5 ? 'rgba(0, 255, 0, 0.2)' : 'rgba(143, 0, 255, 0.2)'
+                });
+            }
+            
+            drawBackground();
+        }
+
+        function drawBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            requestAnimationFrame(drawBackground);
+        }
+
+        initCanvas();
+
+        // Expose functions
+        window.placeBid = placeBid;
+        window.simulateWinner = simulateWinner;
+        window.toggleWinSelection = toggleWinSelection;
+        window.payAdvance = payAdvance;
+        window.addStrike = addStrike;
+        window.resetStrikes = resetStrikes;
+        window.addFunds = addFunds;
+        window.showWithdrawalModal = showWithdrawalModal;
+        window.closeWithdrawalModal = closeWithdrawalModal;
+        window.processWithdrawal = processWithdrawal;
+        window.payEntryFee = payEntryFee;
+    </script>
+</body>
+</html>
